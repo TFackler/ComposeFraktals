@@ -4,7 +4,10 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
+import androidx.compose.material.Text
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,10 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import components.RadioButtonGroup
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -38,25 +41,9 @@ fun main() = application {
 
 @Composable
 fun SierpinskiTriangle() {
-    var maxIterations by remember { mutableStateOf(0) }
-    var iterations by remember { mutableStateOf(maxIterations) }
-    var drawMode by remember { mutableStateOf(DrawMode.SINGLE) }
+    var iterations by remember { mutableStateOf(0f) }
 
-    fun updateState(newIterations: Int, drawMode: DrawMode) {
-        maxIterations = newIterations
-        when (drawMode) {
-            DrawMode.SINGLE -> {
-                // stop coroutine
-                iterations = maxIterations
-            }
-            DrawMode.ANIMATE -> {
-                // stop coroutine
-                // start coroutine
-            }
-        }
-    }
-
-    Row(
+    Column(
         modifier = Modifier.padding(20.dp).border(2.dp, Color.Green, RectangleShape)
     ) {
         val canvasBackground = MaterialTheme.colors.primarySurface
@@ -66,7 +53,7 @@ fun SierpinskiTriangle() {
                 .padding(10.dp)
                 .background(canvasBackground)
                 .padding(10.dp)
-                .fillMaxHeight()
+                .fillMaxWidth()
                 .weight(1.0f)
         ) {
             fun drawTri(bottomLeft: Offset, size: Float) {
@@ -106,25 +93,22 @@ fun SierpinskiTriangle() {
             drawSierpinskiTri(
                 Offset(canvasCenter.x - triSize.width / 2f, canvasCenter.y + triSize.height / 2f),
                 triSize.width,
-                iterations
+                iterations.toInt()
             )
         }
         Column(
-            modifier = Modifier.padding(5.dp).border(2.dp, Color.Cyan, RectangleShape).padding(5.dp).fillMaxHeight()
+            modifier = Modifier
+                .padding(5.dp)
+                .border(2.dp, Color.Cyan, RectangleShape)
+                .padding(5.dp)
+                .fillMaxWidth()
                 .width(250.dp)
         ) {
-            IntegerTextField(
-                "Iterations",
-                0,
-                100,
-                default = maxIterations,
-                onValueChange = { updateState(it, drawMode) })
-            RadioButtonGroup(
-                DrawMode.values().toList(),
-                buildLabel = { it.label },
-                onSelection = {
-                    updateState(maxIterations, it)
-                }
+            LabeledSlider(
+                label = "Iterations",
+                value = iterations,
+                onValueChange = { iterations = it },
+                valueRange = 0f..15f,
             )
         }
     }
@@ -135,4 +119,27 @@ fun sameSidedTriangleHeight(size: Float) = sqrt(3f * size.pow(2) / 4f)
 fun sameSidedTriangleWidth(height: Float): Float {
     // sqrt(4.0f / 3.0f * height.pow(2))
     return 1.1547005f * height
+}
+
+@Composable
+fun LabeledSlider(
+    label: String? = null,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    valueRange: ClosedFloatingPointRange<Float>,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        if (label != null) {
+            Text(
+                text = label,
+                textAlign = TextAlign.Left,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+        }
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
+            valueRange = valueRange,
+        )
+    }
 }
