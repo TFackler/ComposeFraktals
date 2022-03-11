@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import components.LabeledSlider
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -119,27 +120,4 @@ fun sameSidedTriangleHeight(size: Float) = sqrt(3f * size.pow(2) / 4f)
 fun sameSidedTriangleWidth(height: Float): Float {
     // sqrt(4.0f / 3.0f * height.pow(2))
     return 1.1547005f * height
-}
-
-@Composable
-fun LabeledSlider(
-    label: String? = null,
-    value: Float,
-    onValueChange: (Float) -> Unit,
-    valueRange: ClosedFloatingPointRange<Float>,
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        if (label != null) {
-            Text(
-                text = label,
-                textAlign = TextAlign.Left,
-                modifier = Modifier.padding(end = 8.dp)
-            )
-        }
-        Slider(
-            value = value,
-            onValueChange = onValueChange,
-            valueRange = valueRange,
-        )
-    }
 }
