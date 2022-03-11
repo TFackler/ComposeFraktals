@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import components.RadioButtonGroup
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -134,36 +135,4 @@ fun sameSidedTriangleHeight(size: Float) = sqrt(3f * size.pow(2) / 4f)
 fun sameSidedTriangleWidth(height: Float): Float {
     // sqrt(4.0f / 3.0f * height.pow(2))
     return 1.1547005f * height
-}
-
-@Composable
-fun <T> RadioButtonGroup(options: List<T>, buildLabel: (T) -> String, onSelection: ((T) -> Unit)? = null) {
-    if (options.isEmpty()) {
-        return
-    }
-    var selectedIndex by remember { mutableStateOf(0) }
-    Column {
-        for (i in options.indices) {
-            Row {
-                Column {
-                    RadioButton(
-                        selected = i == selectedIndex,
-                        colors = RadioButtonDefaults.colors(MaterialTheme.colors.primary),
-                        onClick = {
-                            selectedIndex = i
-                            if (onSelection != null) {
-                                onSelection(options[i])
-                            }
-                        },
-                    )
-                }
-                Column(modifier = Modifier.align(Alignment.CenterVertically)) {
-                    Text(buildLabel(options[i]))
-                }
-            }
-        }
-    }
-    if (onSelection != null) {
-        onSelection(options[selectedIndex])
-    }
 }
