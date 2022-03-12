@@ -97,7 +97,7 @@ private fun DrawScope.drawSierpinskiTri(
     iterationDepth: Int? = null,
     foregroundColor: Color
 ) {
-    if ((iterationDepth != null && iterationDepth <= 0) || size < 1.0f) {
+    if ((iterationDepth != null && iterationDepth <= 0) || size < 2.0f) {
         return
     }
     drawTri(bottomLeft, size, foregroundColor)
