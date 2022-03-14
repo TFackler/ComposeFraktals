@@ -17,17 +17,22 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import components.LabeledSlider
+import components.RadioButtonGroup
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 @Composable
 fun SierpinskiTriangle() {
     var iterations by remember { mutableStateOf(0f) }
+    var mode by remember { mutableStateOf(SierpinskiMode.TRIANGLE) }
 
     Column(
         modifier = Modifier.padding(20.dp).border(2.dp, Color.Green, RectangleShape)
     ) {
-        SierpinskiTriangleCanvas(iterations.toInt())
+        when (mode) {
+            SierpinskiMode.TRIANGLE -> SierpinskiTriangleCanvas(iterations.toInt())
+            SierpinskiMode.CARPET -> SierpinskiCarpetCanvas(iterations.toInt())
+        }
         Column(
             modifier = Modifier
                 .padding(5.dp)
@@ -42,7 +47,33 @@ fun SierpinskiTriangle() {
                 onValueChange = { iterations = it },
                 valueRange = 0f..15f,
             )
+            RadioButtonGroup(
+                SierpinskiMode.values().toList(),
+                buildLabel = { it.label },
+                onSelection = { mode = it }
+            )
         }
+    }
+}
+
+@Composable
+private fun ColumnScope.SierpinskiCarpetCanvas(iterations: Int? = null) {
+    val canvasBackground = MaterialTheme.colors.primarySurface
+    val canvasForeground = MaterialTheme.colors.onPrimary
+    Canvas(
+        modifier = Modifier
+            .padding(10.dp)
+            .background(canvasBackground)
+            .padding(10.dp)
+            .fillMaxWidth()
+            .weight(1.0f)
+    ) {
+        val canvasCenter = Offset(size.width / 2f, size.height / 2f)
+        drawRect(
+            color = canvasForeground,
+            topLeft = canvasCenter.minus(Offset(100f, 100f)),
+            size = Size(200f, 200f)
+        )
     }
 }
 
