@@ -1,0 +1,53 @@
+package fractals.sierpinski
+
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.unit.dp
+import components.LabeledSlider
+import components.RadioButtonGroup
+
+object Sierpinski {
+    const val MIN_DRAW_SIZE = 2.0f
+}
+
+@Composable
+fun Sierpinski() {
+    var iterations by remember { mutableStateOf(0f) }
+    var mode by remember { mutableStateOf(SierpinskiMode.CARPET) }
+
+    Column(
+        modifier = Modifier.padding(20.dp).border(2.dp, Color.Green, RectangleShape)
+    ) {
+        when (mode) {
+            SierpinskiMode.TRIANGLE -> SierpinskiTriangleCanvas(iterations.toInt())
+            SierpinskiMode.CARPET -> SierpinskiCarpetCanvas(iterations.toInt())
+        }
+        Column(
+            modifier = Modifier
+                .padding(5.dp)
+                .border(2.dp, Color.Cyan, RectangleShape)
+                .padding(5.dp)
+                .fillMaxWidth()
+                .width(250.dp)
+        ) {
+            LabeledSlider(
+                label = "Iterations",
+                value = iterations,
+                onValueChange = { iterations = it },
+                valueRange = 0f..15f,
+            )
+            RadioButtonGroup(
+                SierpinskiMode.values().toList(),
+                buildLabel = { it.label },
+                onSelection = { mode = it }
+            )
+        }
+    }
+}
