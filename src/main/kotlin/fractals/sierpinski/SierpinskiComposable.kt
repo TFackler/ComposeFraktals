@@ -47,6 +47,7 @@ fun Sierpinski() {
                     buildLabel = { it.label },
                     onSelection = { sierpinskiMode = it }
                 )
+                Spacer(modifier = Modifier.padding(end = 30.dp))
                 RadioButtonGroup(
                     DrawMode.values().toList(),
                     buildLabel = { it.label },
