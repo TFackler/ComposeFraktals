@@ -16,8 +16,8 @@ object Sierpinski {
 
 @Composable
 fun Sierpinski() {
-    var iterations by remember { mutableStateOf(0f) }
-    var sierpinskiMode by remember { mutableStateOf(SierpinskiMode.CARPET) }
+    var iterations by remember { mutableStateOf(1f) }
+    var sierpinskiMode by remember { mutableStateOf(SierpinskiMode.TRIANGLE) }
     var drawMode by remember { mutableStateOf(DrawMode.OUTLINE) }
 
     Column(
