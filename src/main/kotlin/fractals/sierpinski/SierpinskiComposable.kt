@@ -1,10 +1,7 @@
 package fractals.sierpinski
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,12 +17,13 @@ object Sierpinski {
 @Composable
 fun Sierpinski() {
     var iterations by remember { mutableStateOf(0f) }
-    var mode by remember { mutableStateOf(SierpinskiMode.CARPET) }
+    var sierpinskiMode by remember { mutableStateOf(SierpinskiMode.CARPET) }
+    var drawMode by remember { mutableStateOf(DrawMode.OUTLINE) }
 
     Column(
         modifier = Modifier.padding(20.dp).border(2.dp, Color.Green, RectangleShape)
     ) {
-        when (mode) {
+        when (sierpinskiMode) {
             SierpinskiMode.TRIANGLE -> SierpinskiTriangleCanvas(iterations.toInt())
             SierpinskiMode.CARPET -> SierpinskiCarpetCanvas(iterations.toInt())
         }
@@ -43,11 +41,18 @@ fun Sierpinski() {
                 onValueChange = { iterations = it },
                 valueRange = 0f..15f,
             )
-            RadioButtonGroup(
-                SierpinskiMode.values().toList(),
-                buildLabel = { it.label },
-                onSelection = { mode = it }
-            )
+            Row {
+                RadioButtonGroup(
+                    SierpinskiMode.values().toList(),
+                    buildLabel = { it.label },
+                    onSelection = { sierpinskiMode = it }
+                )
+                RadioButtonGroup(
+                    DrawMode.values().toList(),
+                    buildLabel = { it.label },
+                    onSelection = { drawMode = it }
+                )
+            }
         }
     }
 }
