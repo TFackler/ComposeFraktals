@@ -24,7 +24,7 @@ fun Sierpinski() {
         modifier = Modifier.padding(20.dp).border(2.dp, Color.Green, RectangleShape)
     ) {
         when (sierpinskiMode) {
-            SierpinskiMode.TRIANGLE -> SierpinskiTriangleCanvas(iterations.toInt())
+            SierpinskiMode.TRIANGLE -> SierpinskiTriangleCanvas(iterations.toInt(), drawMode)
             SierpinskiMode.CARPET -> SierpinskiCarpetCanvas(iterations.toInt())
         }
         Column(

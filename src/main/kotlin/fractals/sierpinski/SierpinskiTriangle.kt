@@ -14,6 +14,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import kotlin.math.pow
@@ -23,7 +24,7 @@ import kotlin.math.sqrt
  * Composable for displaying a sierpinski triangle.
  */
 @Composable
-fun ColumnScope.SierpinskiTriangleCanvas(iterations: Int? = null) {
+fun ColumnScope.SierpinskiTriangleCanvas(iterations: Int? = null, drawMode: DrawMode) {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
     Canvas(
@@ -45,7 +46,9 @@ fun ColumnScope.SierpinskiTriangleCanvas(iterations: Int? = null) {
             Offset(canvasCenter.x - triSize.width / 2f, canvasCenter.y + triSize.height / 2f),
             triSize.width,
             iterations,
-            foregroundColor = canvasForeground
+            foregroundColor = canvasForeground,
+            backgroundColor = canvasBackground,
+            filled = drawMode == DrawMode.FILL,
         )
     }
 }
@@ -54,19 +57,27 @@ private fun DrawScope.drawSierpinskiTri(
     bottomLeft: Offset,
     size: Float,
     iterationDepth: Int? = null,
-    foregroundColor: Color
+    foregroundColor: Color,
+    backgroundColor: Color,
+    filled: Boolean,
 ) {
     if (iterationDepth != null && iterationDepth <= 0) {
         return
     }
     val triangle = createSameSidedTri(bottomLeft, size)
-    drawTri(triangle.first, triangle.second, triangle.third, foregroundColor)
+    if (filled) {
+        fillTri(triangle.first, triangle.second, triangle.third, foregroundColor)
+    } else {
+        drawTri(triangle.first, triangle.second, triangle.third, foregroundColor)
+    }
     drawSierpinskiTriRecursive(
         triangle.first,
         triangle.second,
         triangle.third,
         iterationDepth?.minus(1),
-        foregroundColor
+        foregroundColor,
+        backgroundColor,
+        filled
     )
 }
 
@@ -75,7 +86,9 @@ private fun DrawScope.drawSierpinskiTriRecursive(
     bottomRight: Offset,
     top: Offset,
     iterationDepth: Int?,
-    color: Color
+    foregroundColor: Color,
+    backgroundColor: Color,
+    filled: Boolean,
 ) {
     if ((iterationDepth != null && iterationDepth <= 0) || (bottomLeft - bottomRight).getDistanceSquared() < Sierpinski.MIN_DRAW_SIZE * Sierpinski.MIN_DRAW_SIZE) {
         return
@@ -84,12 +97,40 @@ private fun DrawScope.drawSierpinskiTriRecursive(
     val bottom = bottomLeft + ((bottomRight - bottomLeft) / 2f)
     val topLeft = bottomLeft + ((top - bottomLeft) / 2f)
     val topRight = bottomRight + ((top - bottomRight) / 2f)
-    drawTri(bottom, topLeft, topRight, color)
+    if (filled) {
+        fillTri(bottom, topLeft, topRight, backgroundColor)
+    } else {
+        drawTri(bottom, topLeft, topRight, foregroundColor)
+    }
 
     // recursive calls for the next 3 triangles
-    drawSierpinskiTriRecursive(bottomLeft, topLeft, bottom, iterationDepth?.minus(1), color)
-    drawSierpinskiTriRecursive(bottom, topRight, bottomRight, iterationDepth?.minus(1), color)
-    drawSierpinskiTriRecursive(topRight, topLeft, top, iterationDepth?.minus(1), color)
+    drawSierpinskiTriRecursive(
+        bottomLeft,
+        topLeft,
+        bottom,
+        iterationDepth?.minus(1),
+        foregroundColor,
+        backgroundColor,
+        filled
+    )
+    drawSierpinskiTriRecursive(
+        bottom,
+        topRight,
+        bottomRight,
+        iterationDepth?.minus(1),
+        foregroundColor,
+        backgroundColor,
+        filled
+    )
+    drawSierpinskiTriRecursive(
+        topRight,
+        topLeft,
+        top,
+        iterationDepth?.minus(1),
+        foregroundColor,
+        backgroundColor,
+        filled
+    )
 }
 
 private fun DrawScope.drawTri(a: Offset, b: Offset, c: Offset, color: Color) {
@@ -99,6 +140,15 @@ private fun DrawScope.drawTri(a: Offset, b: Offset, c: Offset, color: Color) {
     path.lineTo(c.x, c.y)
     path.close()
     drawPath(path, color, style = Stroke(1.0f))
+}
+
+private fun DrawScope.fillTri(a: Offset, b: Offset, c: Offset, color: Color) {
+    val path = Path()
+    path.moveTo(a.x, a.y)
+    path.lineTo(b.x, b.y)
+    path.lineTo(c.x, c.y)
+    path.close()
+    drawPath(path, color, style = Fill)
 }
 
 private fun createSameSidedTri(bottomLeft: Offset, sideLength: Float): Triple<Offset, Offset, Offset> {
