@@ -25,7 +25,7 @@ fun Sierpinski() {
     ) {
         when (sierpinskiMode) {
             SierpinskiMode.TRIANGLE -> SierpinskiTriangleCanvas(iterations.toInt(), drawMode)
-            SierpinskiMode.CARPET -> SierpinskiCarpetCanvas(iterations.toInt())
+            SierpinskiMode.CARPET -> SierpinskiCarpetCanvas(iterations.toInt(), drawMode)
         }
         Column(
             modifier = Modifier

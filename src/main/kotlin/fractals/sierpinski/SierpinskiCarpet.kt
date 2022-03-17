@@ -13,6 +13,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 
@@ -20,7 +21,7 @@ import androidx.compose.ui.unit.dp
  * Composable for displaying a sierpinski carpet.
  */
 @Composable
-fun ColumnScope.SierpinskiCarpetCanvas(iterations: Int? = null) {
+fun ColumnScope.SierpinskiCarpetCanvas(iterations: Int? = null, drawMode: DrawMode) {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
     Canvas(
@@ -38,7 +39,9 @@ fun ColumnScope.SierpinskiCarpetCanvas(iterations: Int? = null) {
             Offset(canvasCenter.x - sideLength / 2f, canvasCenter.y - sideLength / 2f),
             sideLength,
             iterations,
-            foregroundColor = canvasForeground
+            foregroundColor = canvasForeground,
+            backgroundColor = canvasBackground,
+            filled = drawMode == DrawMode.FILL,
         )
     }
 }
@@ -47,22 +50,35 @@ private fun DrawScope.drawSierpinskiCarpet(
     topLeft: Offset,
     size: Float,
     iterationDepth: Int? = null,
-    foregroundColor: Color
+    foregroundColor: Color,
+    backgroundColor: Color,
+    filled: Boolean,
 ) {
     if (iterationDepth != null && iterationDepth <= 0) {
         return
     }
-    drawRect(
-        color = foregroundColor,
-        topLeft = topLeft,
-        size = Size(size, size),
-        style = Stroke(1.0f),
-    )
+    if (filled) {
+        drawRect(
+            color = foregroundColor,
+            topLeft = topLeft,
+            size = Size(size, size),
+            style = Fill,
+        )
+    } else {
+        drawRect(
+            color = foregroundColor,
+            topLeft = topLeft,
+            size = Size(size, size),
+            style = Stroke(1f),
+        )
+    }
     drawSierpinskiCarpetRecursive(
         topLeft,
         size,
         iterationDepth?.minus(1),
         foregroundColor,
+        backgroundColor,
+        filled,
     )
 }
 
@@ -70,7 +86,9 @@ private fun DrawScope.drawSierpinskiCarpetRecursive(
     topLeft: Offset,
     size: Float,
     iterationDepth: Int? = null,
-    color: Color
+    foregroundColor: Color,
+    backgroundColor: Color,
+    filled: Boolean,
 ) {
     if ((iterationDepth != null && iterationDepth <= 0) || size <= Sierpinski.MIN_DRAW_SIZE) {
         return
@@ -78,12 +96,21 @@ private fun DrawScope.drawSierpinskiCarpetRecursive(
     // inner rectangle
     val innerSize = size / 3f
     val innerTopLeft = topLeft + Offset(innerSize, innerSize)
-    drawRect(
-        color,
-        innerTopLeft,
-        Size(innerSize, innerSize),
-        style = Stroke(1.0f),
-    )
+    if (filled) {
+        drawRect(
+            backgroundColor,
+            innerTopLeft,
+            Size(innerSize, innerSize),
+            style = Fill,
+        )
+    } else {
+        drawRect(
+            foregroundColor,
+            innerTopLeft,
+            Size(innerSize, innerSize),
+            style = Stroke(1.0f),
+        )
+    }
     // recursive calls for the next 8 squares
     for (i in 0..2) {
         for (j in 0..2) {
@@ -92,7 +119,9 @@ private fun DrawScope.drawSierpinskiCarpetRecursive(
                     topLeft + Offset(innerSize * i, innerSize * j),
                     innerSize,
                     iterationDepth?.minus(1),
-                    color
+                    foregroundColor,
+                    backgroundColor,
+                    filled,
                 )
             }
         }
