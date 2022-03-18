@@ -1,21 +1,16 @@
 package fractals.sierpinski
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.unit.dp
+import components.FraktalCanvas
 
 /**
  * Composable for displaying a sierpinski carpet.
@@ -24,13 +19,8 @@ import androidx.compose.ui.unit.dp
 fun ColumnScope.SierpinskiCarpetCanvas(iterations: Int? = null, drawMode: DrawMode) {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
-    Canvas(
-        modifier = Modifier
-            .padding(10.dp)
-            .background(canvasBackground)
-            .padding(10.dp)
-            .fillMaxWidth()
-            .weight(1.0f)
+    FraktalCanvas(
+        backgroundColor = canvasBackground
     ) {
         val canvasCenter = Offset(size.width / 2f, size.height / 2f)
         val sideLength = java.lang.Float.min(size.width, size.height)
