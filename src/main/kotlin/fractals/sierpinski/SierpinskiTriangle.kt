@@ -7,13 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.graphics.drawscope.Stroke
 import components.FraktalCanvas
-import kotlin.math.pow
-import kotlin.math.sqrt
+import util.draw.*
 
 /**
  * Composable for displaying a sierpinski triangle.
@@ -122,40 +118,3 @@ private fun DrawScope.drawSierpinskiTriRecursive(
         filled
     )
 }
-
-private fun DrawScope.drawTri(a: Offset, b: Offset, c: Offset, color: Color) {
-    val path = Path()
-    path.moveTo(a.x, a.y)
-    path.lineTo(b.x, b.y)
-    path.lineTo(c.x, c.y)
-    path.close()
-    drawPath(path, color, style = Stroke(1.0f))
-}
-
-private fun DrawScope.fillTri(a: Offset, b: Offset, c: Offset, color: Color) {
-    val path = Path()
-    path.moveTo(a.x, a.y)
-    path.lineTo(b.x, b.y)
-    path.lineTo(c.x, c.y)
-    path.close()
-    drawPath(path, color, style = Fill)
-}
-
-private fun createSameSidedTri(bottomLeft: Offset, sideLength: Float): Triple<Offset, Offset, Offset> {
-    val bottomRight = bottomLeft + Offset(sideLength, 0f)
-    val top = bottomLeft + Offset(sideLength / 2f, -sameSidedTriangleHeight(sideLength))
-    return Triple(bottomLeft, bottomRight, top)
-}
-
-/**
- * @return the width of a same sided triangle given its height
- */
-private fun sameSidedTriangleWidth(height: Float): Float {
-    // sqrt(4.0f / 3.0f * height.pow(2))
-    return 1.1547005f * height
-}
-
-/**
- * @return the height of a same sided triangle given its side length
- */
-private fun sameSidedTriangleHeight(size: Float) = sqrt(3f * size.pow(2) / 4f)

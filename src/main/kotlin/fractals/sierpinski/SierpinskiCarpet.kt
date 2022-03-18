@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import components.FraktalCanvas
+import util.draw.DrawMode
 
 /**
  * Composable for displaying a sierpinski carpet.

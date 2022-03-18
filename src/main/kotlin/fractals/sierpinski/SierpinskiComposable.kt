@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import components.LabeledSlider
 import components.RadioButtonGroup
+import util.draw.DrawMode
 
 object Sierpinski {
     const val MIN_DRAW_SIZE = 2.0f
