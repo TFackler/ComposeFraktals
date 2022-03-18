@@ -23,8 +23,8 @@ fun Koch() {
 
     Column {
         when (kochVariant) {
-            CURVE -> KochCurve()
-            SNOWFLAKE -> KochSnowflake()
+            CURVE -> KochCurveCanvas()
+            SNOWFLAKE -> KochSnowflakeCanvas()
         }
         Column(
             modifier = Modifier

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ColumnScope.KochCurve() {
+fun ColumnScope.KochCurveCanvas() {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
     Canvas(
