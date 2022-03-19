@@ -23,7 +23,7 @@ fun Koch() {
 
     Column {
         when (kochVariant) {
-            CURVE -> KochCurveCanvas()
+            CURVE -> KochCurveCanvas(iterations.toInt())
             SNOWFLAKE -> KochSnowflakeCanvas()
         }
         Column(
