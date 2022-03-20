@@ -10,12 +10,13 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import components.FraktalCanvas
+import util.draw.normalize
 import util.draw.rotate
 import util.draw.sameSidedTriangleHeight
 import util.draw.sameSidedTriangleWidth
 
 @Composable
-fun ColumnScope.KochCurveCanvas(iterationDepth: Int) {
+fun ColumnScope.KochCurveCanvas(iterationDepth: Int, angle: Int) {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
     FraktalCanvas(
@@ -32,6 +33,7 @@ fun ColumnScope.KochCurveCanvas(iterationDepth: Int) {
             end = Offset(size.width / 2f + curveLength / 2f, size.height),
             iterationDepth = iterationDepth,
             foregroundColor = canvasForeground,
+            angle = angle,
         )
     }
 }
@@ -41,6 +43,7 @@ private fun DrawScope.drawKochCurve(
     end: Offset,
     iterationDepth: Int,
     foregroundColor: Color,
+    angle: Int,
 ) {
     val vertices = mutableListOf(start, end)
     for (iteration in 0 until iterationDepth) {
@@ -48,12 +51,16 @@ private fun DrawScope.drawKochCurve(
         while (i < vertices.size - 1) {
             val a = vertices[i]
             val b = vertices[i + 1]
-            val newVector = (b - a) / 3f
+            val segmentVector = (b - a) / 3f
 
-            val c = a + newVector
-            val e = a + (newVector * 2f)
-            // -60 degrees because of draw space y increasing downwards
-            val d = c + newVector.rotate(-60f)
+            val c = a + segmentVector
+            val center = a + (segmentVector * 1.5f)
+            val e = a + (segmentVector * 2f)
+
+            // -angle because of draw space y increasing downwards, 180 - angle to flip angle
+            val rotationAngle = -(180 - angle)
+            val triHeight = sameSidedTriangleHeight(segmentVector.getDistance())
+            val d = center + segmentVector.normalize().rotate(rotationAngle.toFloat()) * triHeight
 
             vertices.add(i + 1, e)
             vertices.add(i + 1, d)

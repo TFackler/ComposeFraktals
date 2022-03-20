@@ -17,3 +17,8 @@ fun Offset.rotate(degree: Float): Offset {
     val newY = (normX * sin(radDegree) + (normY * cos(radDegree))).toFloat()
     return Offset(newX, newY) * length
 }
+
+fun Offset.normalize(): Offset {
+    val length = getDistance()
+    return Offset(x / length, y / length)
+}

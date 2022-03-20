@@ -19,11 +19,13 @@ object KochComposable {
 @Composable
 fun Koch() {
     var iterations by remember { mutableStateOf(1f) }
+    var angle by remember { mutableStateOf(90f) }
     var kochVariant by remember { mutableStateOf(CURVE) }
+
 
     Column {
         when (kochVariant) {
-            CURVE -> KochCurveCanvas(iterations.toInt())
+            CURVE -> KochCurveCanvas(iterations.toInt(), angle.toInt())
             SNOWFLAKE -> KochSnowflakeCanvas()
         }
         Column(
@@ -36,6 +38,12 @@ fun Koch() {
                 value = iterations,
                 onValueChange = { iterations = it },
                 valueRange = 0f..15f,
+            )
+            LabeledSlider(
+                label = "Angle",
+                value = angle,
+                onValueChange = { angle = it },
+                valueRange = 1f..179f,
             )
             RadioButtonGroup(
                 listOf(CURVE, SNOWFLAKE),
