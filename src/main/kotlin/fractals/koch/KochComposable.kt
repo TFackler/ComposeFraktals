@@ -8,18 +8,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import components.LabeledSlider
 import components.RadioButtonGroup
+import components.ResettableLabeledSlider
 import fractals.koch.KochComposable.CURVE
 import fractals.koch.KochComposable.SNOWFLAKE
+import fractals.koch.KochComposable.defaultAngle
 
 object KochComposable {
     const val SNOWFLAKE = "snowflake"
     const val CURVE = "curve"
+
+    const val defaultAngle = 90f
 }
 
 @Composable
 fun Koch() {
     var iterations by remember { mutableStateOf(1f) }
-    var angle by remember { mutableStateOf(90f) }
+    var angle by remember { mutableStateOf(defaultAngle) }
     var kochVariant by remember { mutableStateOf(CURVE) }
 
 
@@ -39,9 +43,10 @@ fun Koch() {
                 onValueChange = { iterations = it },
                 valueRange = 0f..15f,
             )
-            LabeledSlider(
+            ResettableLabeledSlider(
                 label = "Angle",
                 value = angle,
+                defaultValue = defaultAngle,
                 onValueChange = { angle = it },
                 valueRange = 1f..179f,
             )
