@@ -16,7 +16,7 @@ import components.RadioButtonGroup
 import components.ResettableLabeledSlider
 import fractals.koch.KochComposable.CURVE
 import fractals.koch.KochComposable.SNOWFLAKE
-import fractals.koch.KochComposable.defaultAngle
+import fractals.koch.KochComposable.DEFAULT_ANGLE
 import util.draw.rotate
 import util.draw.sameSidedTriangleHeight
 import util.draw.sameSidedTriangleWidth
@@ -25,13 +25,13 @@ object KochComposable {
     const val SNOWFLAKE = "snowflake"
     const val CURVE = "curve"
 
-    const val defaultAngle = 90f
+    const val DEFAULT_ANGLE = 90f
 }
 
 @Composable
 fun Koch() {
     var iterations by remember { mutableStateOf(1f) }
-    var angle by remember { mutableStateOf(defaultAngle) }
+    var angle by remember { mutableStateOf(DEFAULT_ANGLE) }
     var kochVariant by remember { mutableStateOf(CURVE) }
 
 
@@ -54,7 +54,7 @@ fun Koch() {
             ResettableLabeledSlider(
                 label = "Angle",
                 value = angle,
-                defaultValue = defaultAngle,
+                defaultValue = DEFAULT_ANGLE,
                 onValueChange = { angle = it },
                 valueRange = 1f..179f,
             )
