@@ -1,44 +1,15 @@
 package fractals.koch
 
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.primarySurface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import components.FraktalCanvas
 import util.draw.normalize
 import util.draw.rotate
 import util.draw.sameSidedTriangleHeight
-import util.draw.sameSidedTriangleWidth
 
-@Composable
-fun ColumnScope.KochCurveCanvas(iterationDepth: Int, angle: Int) {
-    val canvasBackground = MaterialTheme.colors.primarySurface
-    val canvasForeground = MaterialTheme.colors.onPrimary
-    FraktalCanvas(
-        backgroundColor = canvasBackground
-    ) {
-        val curveLength = if (sameSidedTriangleHeight(size.width / 3f) < size.height) {
-            size.width
-        } else {
-            sameSidedTriangleWidth(size.height)
-        }
-
-        drawKochCurve(
-            start = Offset(size.width / 2f - curveLength / 2f, size.height),
-            end = Offset(size.width / 2f + curveLength / 2f, size.height),
-            iterationDepth = iterationDepth,
-            foregroundColor = canvasForeground,
-            angle = angle,
-        )
-    }
-}
-
-private fun DrawScope.drawKochCurve(
+fun DrawScope.drawKochCurve(
     start: Offset,
     end: Offset,
     iterationDepth: Int,
