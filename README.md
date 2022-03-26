@@ -7,7 +7,9 @@ This is a small test project to get accustomed to building UIs with Compose by v
     - [x] filled draw mode for sierpinski carpet
 - [ ] koch fraktal
   - [x] angle reset for koch curve
-  - [ ] visualise koch snowflake
+  - [x] visualise koch snowflake
+  - [ ] add secondary condition for end of recursion to minimise lag when selecting high iteration depth
+  - [ ] anti koch curve and snowflake
 - [ ] ant fraktal
   - [ ] ant move correctly
   - [ ] add / remove ants
