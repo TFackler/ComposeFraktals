@@ -9,8 +9,6 @@ import androidx.compose.material.primarySurface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.dp
 import components.FraktalCanvas
 import components.LabeledSlider
@@ -19,6 +17,7 @@ import components.ResettableLabeledSlider
 import fractals.koch.KochComposable.CURVE
 import fractals.koch.KochComposable.SNOWFLAKE
 import fractals.koch.KochComposable.defaultAngle
+import util.draw.rotate
 import util.draw.sameSidedTriangleHeight
 import util.draw.sameSidedTriangleWidth
 
@@ -39,7 +38,7 @@ fun Koch() {
     Column {
         when (kochVariant) {
             CURVE -> KochCurveCanvas(iterations.toInt(), angle.toInt())
-            SNOWFLAKE -> KochSnowflakeCanvas()
+            SNOWFLAKE -> KochSnowflakeCanvas(iterations.toInt(), angle.toInt())
         }
         Column(
             modifier = Modifier
@@ -92,18 +91,43 @@ private fun ColumnScope.KochCurveCanvas(iterationDepth: Int, angle: Int) {
 }
 
 @Composable
-private fun ColumnScope.KochSnowflakeCanvas() {
+private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int) {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
     FraktalCanvas(
         backgroundColor = canvasBackground
     ) {
-        val canvasCenter = Offset(size.width / 2f, size.height / 2f)
-        drawRect(
-            color = canvasForeground,
-            topLeft = canvasCenter - Offset(200f, 200f),
-            size = Size(400f, 400f),
-            style = Fill,
+        val surroundingCircleRadius = if (size.width < size.height) {
+            size.width / 2f
+        } else {
+            size.height / 2f
+        }
+
+        val centerToTop = Offset(0f, -surroundingCircleRadius)
+        val top = center + centerToTop
+        val bottomRight = center + centerToTop.rotate(120f)
+        val bottomLeft = center + centerToTop.rotate(240f)
+
+        drawKochCurve(
+            start = top,
+            end = bottomRight,
+            iterationDepth = iterationDepth,
+            foregroundColor = canvasForeground,
+            angle = angle,
+        )
+        drawKochCurve(
+            start = bottomRight,
+            end = bottomLeft,
+            iterationDepth = iterationDepth,
+            foregroundColor = canvasForeground,
+            angle = angle,
+        )
+        drawKochCurve(
+            start = bottomLeft,
+            end = top,
+            iterationDepth = iterationDepth,
+            foregroundColor = canvasForeground,
+            angle = angle,
         )
     }
 }
