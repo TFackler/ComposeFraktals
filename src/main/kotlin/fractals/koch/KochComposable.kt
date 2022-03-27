@@ -7,10 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
-import components.FraktalCanvas
-import components.LabeledSlider
-import components.RadioButtonGroup
-import components.ResettableLabeledSlider
+import components.*
 import fractals.koch.KochComposable.CURVE
 import fractals.koch.KochComposable.DEFAULT_ANGLE
 import fractals.koch.KochComposable.SNOWFLAKE
@@ -29,6 +26,7 @@ fun Koch() {
     var angle by remember { mutableStateOf(DEFAULT_ANGLE) }
     var kochVariant by remember { mutableStateOf(CURVE) }
     var drawMode by remember { mutableStateOf(DrawMode.OUTLINE) }
+    var isAntiSnowflake by remember { mutableStateOf(false) }
 
 
     Column {
@@ -66,6 +64,15 @@ fun Koch() {
                     buildLabel = { it.label },
                     onSelection = { drawMode = it }
                 )
+                if (kochVariant == SNOWFLAKE) {
+                    Spacer(modifier = Modifier.padding(end = 30.dp))
+                    LabeledSwitch(
+                        label = "anti-snowflake",
+                        checked = isAntiSnowflake,
+                        onCheckedChange = { isAntiSnowflake = it },
+                        enabled = true,
+                    )
+                }
             }
         }
     }
