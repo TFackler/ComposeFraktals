@@ -1,9 +1,6 @@
 package fractals.koch
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.*
@@ -15,11 +12,9 @@ import components.LabeledSlider
 import components.RadioButtonGroup
 import components.ResettableLabeledSlider
 import fractals.koch.KochComposable.CURVE
-import fractals.koch.KochComposable.SNOWFLAKE
 import fractals.koch.KochComposable.DEFAULT_ANGLE
-import util.draw.rotate
-import util.draw.sameSidedTriangleHeight
-import util.draw.sameSidedTriangleWidth
+import fractals.koch.KochComposable.SNOWFLAKE
+import util.draw.*
 
 object KochComposable {
     const val SNOWFLAKE = "snowflake"
@@ -33,12 +28,13 @@ fun Koch() {
     var iterations by remember { mutableStateOf(1f) }
     var angle by remember { mutableStateOf(DEFAULT_ANGLE) }
     var kochVariant by remember { mutableStateOf(CURVE) }
+    var drawMode by remember { mutableStateOf(DrawMode.OUTLINE) }
 
 
     Column {
         when (kochVariant) {
-            CURVE -> KochCurveCanvas(iterations.toInt(), angle.toInt())
-            SNOWFLAKE -> KochSnowflakeCanvas(iterations.toInt(), angle.toInt())
+            CURVE -> KochCurveCanvas(iterations.toInt(), angle.toInt(), drawMode)
+            SNOWFLAKE -> KochSnowflakeCanvas(iterations.toInt(), angle.toInt(), drawMode)
         }
         Column(
             modifier = Modifier
@@ -58,17 +54,25 @@ fun Koch() {
                 onValueChange = { angle = it },
                 valueRange = 1f..179f,
             )
-            RadioButtonGroup(
-                listOf(CURVE, SNOWFLAKE),
-                buildLabel = { it },
-                onSelection = { kochVariant = it }
-            )
+            Row {
+                RadioButtonGroup(
+                    listOf(CURVE, SNOWFLAKE),
+                    buildLabel = { it },
+                    onSelection = { kochVariant = it }
+                )
+                Spacer(modifier = Modifier.padding(end = 30.dp))
+                RadioButtonGroup(
+                    DrawMode.values().toList(),
+                    buildLabel = { it.label },
+                    onSelection = { drawMode = it }
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun ColumnScope.KochCurveCanvas(iterationDepth: Int, angle: Int) {
+private fun ColumnScope.KochCurveCanvas(iterationDepth: Int, angle: Int, drawMode: DrawMode) {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
     FraktalCanvas(
@@ -86,12 +90,13 @@ private fun ColumnScope.KochCurveCanvas(iterationDepth: Int, angle: Int) {
             iterationDepth = iterationDepth,
             foregroundColor = canvasForeground,
             angle = angle,
+            drawMode = drawMode,
         )
     }
 }
 
 @Composable
-private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int) {
+private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int, drawMode: DrawMode) {
     val canvasBackground = MaterialTheme.colors.primarySurface
     val canvasForeground = MaterialTheme.colors.onPrimary
     FraktalCanvas(
@@ -108,12 +113,16 @@ private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int) {
         val bottomRight = center + centerToTop.rotate(120f)
         val bottomLeft = center + centerToTop.rotate(240f)
 
+        if (drawMode == DrawMode.FILL) {
+            fillTri(top, bottomLeft, bottomRight, canvasForeground)
+        }
         drawKochCurve(
             start = top,
             end = bottomRight,
             iterationDepth = iterationDepth,
             foregroundColor = canvasForeground,
             angle = angle,
+            drawMode = drawMode,
         )
         drawKochCurve(
             start = bottomRight,
@@ -121,6 +130,7 @@ private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int) {
             iterationDepth = iterationDepth,
             foregroundColor = canvasForeground,
             angle = angle,
+            drawMode = drawMode,
         )
         drawKochCurve(
             start = bottomLeft,
@@ -128,6 +138,7 @@ private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int) {
             iterationDepth = iterationDepth,
             foregroundColor = canvasForeground,
             angle = angle,
+            drawMode = drawMode,
         )
     }
 }
