@@ -5,13 +5,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import components.FraktalCanvas
 import util.draw.DrawMode
-import util.draw.rotate
+import util.draw.sameSidedTriangleHeight
+import util.draw.sameSidedTriangleWidth
 
 @Composable
 fun ColumnScope.KochAntiSnowflakeCanvas(iterationDepth: Int, angle: Int, drawMode: DrawMode) {
@@ -20,16 +22,15 @@ fun ColumnScope.KochAntiSnowflakeCanvas(iterationDepth: Int, angle: Int, drawMod
     FraktalCanvas(
         backgroundColor = canvasBackground
     ) {
-        val surroundingCircleRadius = if (size.width < size.height) {
-            size.width / 2f
+        val triSize = if (sameSidedTriangleHeight(size.width) < size.height) {
+            Size(size.width, sameSidedTriangleHeight(size.width))
         } else {
-            size.height / 2f
+            Size(sameSidedTriangleWidth(size.height), size.height)
         }
 
-        val centerToTop = Offset(0f, -surroundingCircleRadius)
-        val top = center + centerToTop
-        val bottomRight = center + centerToTop.rotate(120f)
-        val bottomLeft = center + centerToTop.rotate(240f)
+        val top = center + Offset(0f, -(triSize.height / 2f))
+        val bottomRight = center + Offset(triSize.width / 2f, triSize.height / 2f)
+        val bottomLeft = center + Offset(-(triSize.width / 2f), triSize.height / 2f)
 
         drawAntiKochSnowflake(
             top = top,
