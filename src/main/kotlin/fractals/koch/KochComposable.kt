@@ -7,7 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
-import components.*
+import components.FraktalCanvas
+import components.LabeledSlider
+import components.RadioButtonGroup
+import components.ResettableLabeledSlider
+import fractals.koch.KochComposable.ANTI_SNOWFLAKE
 import fractals.koch.KochComposable.CURVE
 import fractals.koch.KochComposable.DEFAULT_ANGLE
 import fractals.koch.KochComposable.SNOWFLAKE
@@ -16,6 +20,7 @@ import util.draw.*
 object KochComposable {
     const val SNOWFLAKE = "snowflake"
     const val CURVE = "curve"
+    const val ANTI_SNOWFLAKE = "anti-snowflake"
 
     const val DEFAULT_ANGLE = 90f
 }
@@ -26,13 +31,13 @@ fun Koch() {
     var angle by remember { mutableStateOf(DEFAULT_ANGLE) }
     var kochVariant by remember { mutableStateOf(CURVE) }
     var drawMode by remember { mutableStateOf(DrawMode.OUTLINE) }
-    var isAntiSnowflake by remember { mutableStateOf(false) }
 
 
     Column {
         when (kochVariant) {
             CURVE -> KochCurveCanvas(iterations.toInt(), angle.toInt(), drawMode)
             SNOWFLAKE -> KochSnowflakeCanvas(iterations.toInt(), angle.toInt(), drawMode)
+            ANTI_SNOWFLAKE -> KochAntiSnowflakeCanvas(iterations.toInt(), angle.toInt(), drawMode)
         }
         Column(
             modifier = Modifier
@@ -54,7 +59,7 @@ fun Koch() {
             )
             Row {
                 RadioButtonGroup(
-                    listOf(CURVE, SNOWFLAKE),
+                    listOf(CURVE, SNOWFLAKE, ANTI_SNOWFLAKE),
                     buildLabel = { it },
                     onSelection = { kochVariant = it }
                 )
@@ -64,15 +69,6 @@ fun Koch() {
                     buildLabel = { it.label },
                     onSelection = { drawMode = it }
                 )
-                if (kochVariant == SNOWFLAKE) {
-                    Spacer(modifier = Modifier.padding(end = 30.dp))
-                    LabeledSwitch(
-                        label = "anti-snowflake",
-                        checked = isAntiSnowflake,
-                        onCheckedChange = { isAntiSnowflake = it },
-                        enabled = true,
-                    )
-                }
             }
         }
     }
@@ -125,14 +121,6 @@ private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int, dra
         }
         drawKochCurve(
             start = top,
-            end = bottomRight,
-            iterationDepth = iterationDepth,
-            foregroundColor = canvasForeground,
-            angle = angle,
-            drawMode = drawMode,
-        )
-        drawKochCurve(
-            start = bottomRight,
             end = bottomLeft,
             iterationDepth = iterationDepth,
             foregroundColor = canvasForeground,
@@ -141,10 +129,48 @@ private fun ColumnScope.KochSnowflakeCanvas(iterationDepth: Int, angle: Int, dra
         )
         drawKochCurve(
             start = bottomLeft,
-            end = top,
+            end = bottomRight,
             iterationDepth = iterationDepth,
             foregroundColor = canvasForeground,
             angle = angle,
+            drawMode = drawMode,
+        )
+        drawKochCurve(
+            start = bottomRight,
+            end = top,
+            iterationDepth = iterationDepth,
+            foregroundColor = canvasBackground,
+            angle = angle,
+            drawMode = drawMode,
+        )
+    }
+}
+
+@Composable
+private fun ColumnScope.KochAntiSnowflakeCanvas(iterationDepth: Int, angle: Int, drawMode: DrawMode) {
+    val canvasBackground = MaterialTheme.colors.primarySurface
+    val canvasForeground = MaterialTheme.colors.onPrimary
+    FraktalCanvas(
+        backgroundColor = canvasBackground
+    ) {
+        val surroundingCircleRadius = if (size.width < size.height) {
+            size.width / 2f
+        } else {
+            size.height / 2f
+        }
+
+        val centerToTop = Offset(0f, -surroundingCircleRadius)
+        val top = center + centerToTop
+        val bottomRight = center + centerToTop.rotate(120f)
+        val bottomLeft = center + centerToTop.rotate(240f)
+
+        drawAntiKochSnowflake(
+            top = top,
+            bottomLeft = bottomLeft,
+            bottomRight = bottomRight,
+            iterationDepth = iterationDepth,
+            angle = angle,
+            foregroundColor = canvasForeground,
             drawMode = drawMode,
         )
     }
