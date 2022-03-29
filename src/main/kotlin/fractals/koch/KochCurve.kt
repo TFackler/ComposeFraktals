@@ -24,7 +24,7 @@ fun ColumnScope.KochCurveCanvas(iterationDepth: Int, angle: Int, drawMode: DrawM
         val curveLength = if (sameSidedTriangleHeight(size.width / 3f) < size.height) {
             size.width
         } else {
-            sameSidedTriangleWidth(size.height)
+            sameSidedTriangleWidth(size.height) * 3f
         }
 
         drawKochCurve(
