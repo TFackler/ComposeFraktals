@@ -51,7 +51,7 @@ fun Koch() {
                 value = angle,
                 defaultValue = DEFAULT_ANGLE,
                 onValueChange = { angle = it },
-                valueRange = 1f..179f,
+                valueRange = 0f..180f,
             )
             Row {
                 RadioButtonGroup(
