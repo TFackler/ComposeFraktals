@@ -21,3 +21,7 @@ This is a small test project to get accustomed to building UIs with Compose by v
   - [ ] ant move correctly
   - [ ] add / remove ants
   - [ ] different colored ants
+- [ ] pythagoras tree
+- [ ] dragon curve
+- [ ] hilbert curve
+- [ ] Penta Plexity
