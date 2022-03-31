@@ -13,10 +13,7 @@ This is a small test project to get accustomed to building UIs with Compose by v
   - [x] anti koch curve and snowflake
   - [x] fix auto sizing issue of koch curve in 'landscape mode'
   - [x] allow angles of [0, 180] (inclusive)
-- [ ] navigation
-  - [ ] add rudimentary home screen
-  - [ ] add navigation to the different fraktals
-  - [ ] add back navigation
+- [x] basic navigation
 - [ ] ant fraktal
   - [ ] ant move correctly
   - [ ] add / remove ants
