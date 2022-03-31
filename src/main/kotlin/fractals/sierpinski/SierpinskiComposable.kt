@@ -1,11 +1,8 @@
 package fractals.sierpinski
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import components.LabeledSlider
 import components.RadioButtonGroup
@@ -21,20 +18,15 @@ fun Sierpinski() {
     var sierpinskiMode by remember { mutableStateOf(SierpinskiMode.TRIANGLE) }
     var drawMode by remember { mutableStateOf(DrawMode.OUTLINE) }
 
-    Column(
-        modifier = Modifier.padding(20.dp).border(2.dp, Color.Green, RectangleShape)
-    ) {
+    Column {
         when (sierpinskiMode) {
             SierpinskiMode.TRIANGLE -> SierpinskiTriangleCanvas(iterations.toInt(), drawMode)
             SierpinskiMode.CARPET -> SierpinskiCarpetCanvas(iterations.toInt(), drawMode)
         }
         Column(
             modifier = Modifier
-                .padding(5.dp)
-                .border(2.dp, Color.Cyan, RectangleShape)
-                .padding(5.dp)
+                .padding(10.dp)
                 .fillMaxWidth()
-                .width(250.dp)
         ) {
             LabeledSlider(
                 label = "Iterations",
