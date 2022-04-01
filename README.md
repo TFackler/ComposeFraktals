@@ -15,8 +15,10 @@ This is a small test project to get accustomed to building UIs with Compose by v
   - [x] allow angles of [0, 180] (inclusive)
 - [x] basic navigation
 - [ ] ant fraktal
-  - [ ] ant move correctly
-  - [ ] add / remove ants
+  - [x] ant move correctly
+  - [ ] add scaling for ants
+  - [ ] optimise drawing procedure
+  - [ ] allow user to add / remove ants to starting board
   - [ ] different colored ants
 - [ ] pythagoras tree
 - [ ] dragon curve
