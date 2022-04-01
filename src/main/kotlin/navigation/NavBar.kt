@@ -24,5 +24,11 @@ fun NavBar() {
         ) {
             Text("Sierpinski")
         }
+        Button(
+            modifier = Modifier.padding(10.dp),
+            onClick = { showScreen(NavigationController.Screen.ANT) },
+        ) {
+            Text("Ant")
+        }
     }
 }

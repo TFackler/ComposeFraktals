@@ -4,6 +4,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import fractals.ants.LangtonsAnt
 import fractals.koch.Koch
 import fractals.sierpinski.Sierpinski
 import navigation.NavBar
@@ -19,6 +20,7 @@ fun App() {
             when (navigationController.screen.value) {
                 NavigationController.Screen.KOCH -> Koch()
                 NavigationController.Screen.SIERPINSKI -> Sierpinski()
+                NavigationController.Screen.ANT -> LangtonsAnt()
             }
         }
     }
