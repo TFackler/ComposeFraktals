@@ -16,7 +16,7 @@ This is a small test project to get accustomed to building UIs with Compose by v
 - [x] basic navigation
 - [ ] ant fraktal
   - [x] ant move correctly
-  - [ ] add scaling for ants
+  - [x] add scaling for ants
   - [ ] optimise drawing procedure
   - [ ] allow user to add / remove ants to starting board
   - [ ] different colored ants

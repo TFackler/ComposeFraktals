@@ -6,7 +6,7 @@ class AntBoard(
     val width: Int,
     val height: Int,
 ) {
-    val board = Array(width) { Array(height) { Color(255, 255, 255) } }
+    private val board = Array(width) { Array(height) { Color(255, 255, 255) } }
     val ants = mutableListOf<Ant>()
 
     fun get(x: Int, y: Int): Color {
