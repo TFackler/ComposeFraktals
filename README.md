@@ -21,6 +21,10 @@ This is a small test project to get accustomed to building UIs with Compose by v
   - [ ] allow user to add / remove ants to starting board
   - [ ] different colored ants
 - [ ] pythagoras tree
+  - [ ] add navigation entry
+  - [ ] add basic pythagoras tree
+  - [ ] make angle adjustable
+  - [ ] add optional realistic color mode
 - [ ] dragon curve
 - [ ] hilbert curve
 - [ ] Penta Plexity
