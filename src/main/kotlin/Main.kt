@@ -6,6 +6,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import fractals.ants.LangtonsAnt
 import fractals.koch.Koch
+import fractals.pythagoras.PythagorasTree
 import fractals.sierpinski.Sierpinski
 import navigation.NavBar
 import navigation.NavigationController
@@ -21,6 +22,7 @@ fun App() {
                 NavigationController.Screen.KOCH -> Koch()
                 NavigationController.Screen.SIERPINSKI -> Sierpinski()
                 NavigationController.Screen.ANT -> LangtonsAnt()
+                NavigationController.Screen.PYTHAGORAS -> PythagorasTree()
             }
         }
     }

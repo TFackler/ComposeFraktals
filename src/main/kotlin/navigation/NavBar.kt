@@ -30,5 +30,11 @@ fun NavBar() {
         ) {
             Text("Ant")
         }
+        Button(
+            modifier = Modifier.padding(10.dp),
+            onClick = { showScreen(NavigationController.Screen.PYTHAGORAS) },
+        ) {
+            Text("Pythagoras Tree")
+        }
     }
 }

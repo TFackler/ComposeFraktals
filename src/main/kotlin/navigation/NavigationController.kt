@@ -7,6 +7,6 @@ object NavigationController {
     var screen: MutableState<Screen> = mutableStateOf(Screen.KOCH)
 
     enum class Screen {
-        KOCH, SIERPINSKI, ANT
+        KOCH, SIERPINSKI, ANT, PYTHAGORAS
     }
 }
