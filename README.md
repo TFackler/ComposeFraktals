@@ -22,7 +22,8 @@ This is a small test project to get accustomed to building UIs with Compose by v
   - [ ] different colored ants
 - [ ] pythagoras tree
   - [x] add navigation entry
-  - [ ] add basic pythagoras tree
+  - [x] add basic pythagoras tree
+  - [ ] make segment size adjustable
   - [ ] make angle adjustable
   - [ ] add optional realistic color mode
 - [ ] dragon curve
